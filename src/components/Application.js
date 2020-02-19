@@ -4,7 +4,7 @@ import Appointment from 'components/Appointment';
 
 import "components/Application.scss";
 import DayList from 'components/DayList';
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application(props) {
 
@@ -24,11 +24,15 @@ export default function Application(props) {
     Promise.all([days, appointments, interviewers])
     .then(all => {
       setState(prev => ({days: all[0].data, appointments: all[1].data, interviewers: all[2].data}))
-      console.log(interviewers)
     })
     .catch(err => console.log(err));
   },[])
+  
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+  }
 
+  const interviewersArr = getInterviewersForDay(state, state.day);
   const appointments = getAppointmentsForDay(state, state.day);
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -38,6 +42,8 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewersArr}
+        bookInterview={bookInterview}
       />
     );
   });
