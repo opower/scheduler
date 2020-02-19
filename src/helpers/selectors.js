@@ -49,7 +49,6 @@
     if(!interview){
       return null;
     }
-
     let interviewObj = {};
     interviewObj['student'] = interview.student;
     let interviewerID = interview.interviewer;
