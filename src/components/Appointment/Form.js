@@ -18,7 +18,7 @@ export default function Form(props){
   }
 
   const save = () => {
-    props.onSave(name, interviewer)
+    name ? props.onSave(name, interviewer) : props.onSave(props.student, interviewer)
   }
   return (
     <main className="appointment__card appointment__card--create">
@@ -26,21 +26,21 @@ export default function Form(props){
         <form autoComplete="off" onSubmit={event => event.preventDefault()}>
           <input
             className="appointment__create-input text--semi-bold"
-            value={name}
+            value={name || props.student}
             type="text"
-            placeholder="Enter Student Name"
+            placeholder={"Enter Student Name"}
             onChange={(event) => setName(event.target.value)}
             /*
               This must be a controlled component
             */
           />
         </form>
-        <InterviewerList interviewers={props.interviewers} value={interviewer} onChange={setInterviewer} />
+        <InterviewerList interviewers={props.interviewers} value={interviewer || props.interviewer} onChange={setInterviewer} />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={()=> cancel()}>Cancel</Button>
-          <Button confirm onClick={()=> save()}>Save</Button>
+          <Button danger onClick={cancel}>Cancel</Button>
+          <Button confirm onClick={save}>Save</Button>
         </section>
       </section>
     </main>
