@@ -18,7 +18,7 @@ export default function Form(props){
   }
 
   const save = () => {
-    name ? props.onSave(name, interviewer) : props.onSave(props.student, interviewer)
+    props.onSave(name || props.student, interviewer)
   }
   return (
     <main className="appointment__card appointment__card--create">

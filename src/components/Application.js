@@ -39,15 +39,13 @@ export default function Application(props) {
     };
 
     return axios.put(`/api/appointments/${id}`, appointment)
-    .then(res => setState({...state, appointments}))
-    .catch(err => console.log(err))
+    .then(() => setState({...state, appointments}))
   }
 
   function cancelInterview(id){
 
     return axios.delete(`/api/appointments/${id}`)
     .then(res => console.log(res))
-    .catch(err => console.log(err))
 
   }
 

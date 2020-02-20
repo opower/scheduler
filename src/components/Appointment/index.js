@@ -7,6 +7,8 @@ import Form from './Form';
 import Status from './Status';
 import useVisualMode from '../../hooks/useVisualMode';
 import Confirm from './Confirm';
+import Error from './Error';
+
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -15,6 +17,9 @@ const DELETE = 'DELETING';
 const CONFIRM = 'CONFIRM';
 const msg = 'Are you sure you would like to delete?';
 const EDIT = 'EDIT';
+const ERROR_SAVE = 'ERROR_SAVE';
+const ERROR_DELETE = 'ERROR_DELETE';
+const cancelMsg = 'Could not cancel appointment';
 
 
 export default function Appointment (props){
@@ -38,9 +43,10 @@ export default function Appointment (props){
   }
 
   function onDelete(){
-    transition(DELETE)
+    transition(DELETE, true)
     props.cancelInterview(props.id)
-    .then(res => transition(EMPTY))
+    .then(() => transition(EMPTY))
+    .catch(err => transition(ERROR_DELETE, true))
   }
 
 
@@ -51,7 +57,8 @@ export default function Appointment (props){
     };
     transition(SAVING)
     props.bookInterview(props.id, interview)
-    .then(res => transition(SHOW))
+    .then(() => transition(SHOW))
+    .catch(err => transition(ERROR_SAVE, true))
   }
 
   return (
@@ -60,11 +67,14 @@ export default function Appointment (props){
 
       {mode === EMPTY && <Empty onAdd={onAdd} />}
       {mode === CREATE && <Form interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
+      {mode === ERROR_DELETE && <Error message={cancelMsg} onCancel={onCancel}/>}
+      {mode === ERROR_SAVE && <Error message={cancelMsg} onCancel={onCancel}/>}
       {mode === SAVING && <Status message={SAVING} />}
       {mode === SHOW && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
       {mode === DELETE && <Status message={DELETE}/>}
       {mode === CONFIRM && <Confirm message={msg} onCancel={onCancel} onConfirm={onDelete} />}
       {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={onCancel} onSave={save} interviewer={props.interview.interviewer.id}/>}
+
 
     </article>
   )
