@@ -17,8 +17,8 @@ export default function useApplicationData(){
       return {days: all[0].data, appointments: all[1].data, interviewers: all[2].data}
     },
     SET_INTERVIEW: (state, action) => {
-      const { interview, appointments } = action;
-      return interview ? {...state, appointments} : state;
+      const { interview, appointments, days} = action;
+      return interview ? {...state, appointments, days} : {...state, days};
     }
   }
 
@@ -48,6 +48,9 @@ export default function useApplicationData(){
   },[])
   
   function bookInterview(id, interview) {
+
+    const days = updateSpots(id, true);
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -57,22 +60,42 @@ export default function useApplicationData(){
       [id]: appointment
     };
     return axios.put(`/api/appointments/${id}`, appointment)
-    .then(() => dispatch({type: SET_INTERVIEW, id, interview, appointments}))
+    .then(() => dispatch({type: SET_INTERVIEW, id, interview, appointments, days}))
   }
   
   function cancelInterview(id){
+
+    const days = updateSpots(id, false);
+
     return axios.delete(`/api/appointments/${id}`)
-    .then(() => dispatch({type: SET_INTERVIEW, id, interview: null}))
+    .then(() => dispatch({type: SET_INTERVIEW, id, interview: null, days}))
+  }
+
+  //appointment id is know when an interview is confirmed or canceled
+  function updateSpots(id, flag){
+    const filterDay = state.days.filter(day => day.appointments.includes(id));
+    const appointArr = filterDay[0].appointments;
+    const dayId = filterDay[0].id;
+    let newSpots = state.days[dayId - 1].spots;
+
+    if(flag){
+      newSpots--;
+    } else {
+      newSpots++;
+    }
+
+    return state.days.map(day => {
+      if(day.id !== dayId){
+        return day
+      } return {
+        ...day,
+        spots: newSpots
+      }
+    })
+
   }
 
   return {state, setDay, bookInterview, cancelInterview};
 }
 
-// function updateArray(id, appointments){
-//   return appointments.map(appointment => {
-//     if(appointment.id !== id){
-//       return appointment;
-//     }
-//   });
-// }
 

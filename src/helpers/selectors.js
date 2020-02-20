@@ -32,15 +32,14 @@
       return [];
     }
     let interviewers = Object.values(state.interviewers)
-    let ints = [];
 
+    let ints = [];
     for(const i in interviewers){
       if(dayInterviewers.includes(interviewers[i].id)){
         ints.push(interviewers[i]);
       }
     }
     return ints;
-    
 
   }
 
