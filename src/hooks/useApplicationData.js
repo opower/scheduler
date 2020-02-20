@@ -78,9 +78,9 @@ export default function useApplicationData(){
     const dayId = filterDay[0].id;
     let newSpots = state.days[dayId - 1].spots;
 
-    if(flag){
+    if(flag && state.appointments[id].interview === null){
       newSpots--;
-    } else {
+    } else if (!flag){
       newSpots++;
     }
 
