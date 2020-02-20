@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles.scss';
 import Header from './Header';
 import Empty from './Empty';
@@ -73,7 +73,7 @@ export default function Appointment (props){
       {mode === SHOW && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
       {mode === DELETE && <Status message={DELETE}/>}
       {mode === CONFIRM && <Confirm message={msg} onCancel={onCancel} onConfirm={onDelete} />}
-      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={onCancel} onSave={save} interviewer={props.interview.interviewer.id}/>}
+      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
 
 
     </article>

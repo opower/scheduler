@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import axios from 'axios';
 
 export default function useApplicationData(){
@@ -7,6 +7,20 @@ export default function useApplicationData(){
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
 
+  const lookUp = {
+    SET_DAY: (state, action) => {
+      const { day } = action;
+      return {...state, day}
+    },
+    SET_APPLICATION_DATA: (state, action) => {
+      const { all } = action;
+      return {days: all[0].data, appointments: all[1].data, interviewers: all[2].data}
+    },
+    SET_INTERVIEW: (state, action) => {
+      const { interview, appointments } = action;
+      return interview ? {...state, appointments} : state;
+    }
+  }
 
   const [state, dispatch] = useReducer(reducer,{
     day: "Monday",
@@ -15,24 +29,11 @@ export default function useApplicationData(){
     interviewer: {}
   });
 
-function reducer(state, action) {
-    switch (action.type) {
-      case SET_DAY:
-        const { day } = action;
-        return {...state, day}
-      case SET_APPLICATION_DATA:
-        const { all } = action;
-        return {days: all[0].data, appointments: all[1].data, interviewers: all[2].data}
-      case SET_INTERVIEW: {
-        const { interview, appointments } = action;
-        return interview ? {...state, appointments} : state;
-      }
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
-    }
+  function reducer(state, action) {
+    return lookUp[action.type](state, action);
   }
+
+
   const setDay = day => dispatch({type: SET_DAY, day});
   
   useEffect(()=>{
@@ -63,7 +64,15 @@ function reducer(state, action) {
     return axios.delete(`/api/appointments/${id}`)
     .then(() => dispatch({type: SET_INTERVIEW, id, interview: null}))
   }
-  
+
   return {state, setDay, bookInterview, cancelInterview};
 }
+
+// function updateArray(id, appointments){
+//   return appointments.map(appointment => {
+//     if(appointment.id !== id){
+//       return appointment;
+//     }
+//   });
+// }
 
