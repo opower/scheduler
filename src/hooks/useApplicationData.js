@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
+// const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData(){
 
@@ -18,7 +19,7 @@ export default function useApplicationData(){
     },
     SET_INTERVIEW: (state, action) => {
       const { interview, appointments, days} = action;
-      return interview ? {...state, appointments, days} : {...state, days};
+      return interview ? {...state, appointments, days} : {...state, appointments, days};
     }
   }
 
@@ -40,6 +41,9 @@ export default function useApplicationData(){
     let days = axios.get('api/days');
     let appointments = axios.get('/api/appointments');
     let interviewers = axios.get('/api/interviewers');
+    // let webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
+    // webSocket.send('Hey');
+
     Promise.all([days, appointments, interviewers])
     .then(all => {
       dispatch({type: SET_APPLICATION_DATA, days, interviewers, appointments, all});
@@ -60,21 +64,29 @@ export default function useApplicationData(){
       [id]: appointment
     };
     return axios.put(`/api/appointments/${id}`, appointment)
-    .then(() => dispatch({type: SET_INTERVIEW, id, interview, appointments, days}))
+    .then(() => dispatch({type: SET_INTERVIEW, interview, appointments, days}))
   }
   
   function cancelInterview(id){
 
     const days = updateSpots(id, false);
 
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
     return axios.delete(`/api/appointments/${id}`)
-    .then(() => dispatch({type: SET_INTERVIEW, id, interview: null, days}))
+    .then(() => dispatch({type: SET_INTERVIEW, id, appointments, interview: null, days}))
   }
 
   //appointment id is know when an interview is confirmed or canceled
   function updateSpots(id, flag){
     const filterDay = state.days.filter(day => day.appointments.includes(id));
-    const appointArr = filterDay[0].appointments;
     const dayId = filterDay[0].id;
     let newSpots = state.days[dayId - 1].spots;
 
