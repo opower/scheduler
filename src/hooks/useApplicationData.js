@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
-// const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
+const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData(){
 
@@ -34,7 +34,6 @@ export default function useApplicationData(){
     return lookUp[action.type](state, action);
   }
 
-
   const setDay = day => dispatch({type: SET_DAY, day});
   
   useEffect(()=>{
@@ -42,7 +41,21 @@ export default function useApplicationData(){
     let appointments = axios.get('/api/appointments');
     let interviewers = axios.get('/api/interviewers');
     // let webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
-    // webSocket.send('Hey');
+    // webSocket.onopen = function (event) {
+    //   let msg = {
+    //     type: SET_INTERVIEW
+    //   }
+    //   webSocket.send(JSON.stringify(msg)); 
+    // }
+
+    // webSocket.onmessage = function (event){
+    //   let { type, id, interview } = JSON.parse(event.data);
+    //   if(type === 'SET_INTERVIEW'){
+    //     dispatch({type, id, interview});
+    //   }
+    // }
+    
+    // webSocket.close();
 
     Promise.all([days, appointments, interviewers])
     .then(all => {
@@ -104,7 +117,6 @@ export default function useApplicationData(){
         spots: newSpots
       }
     })
-
   }
 
   return {state, setDay, bookInterview, cancelInterview};

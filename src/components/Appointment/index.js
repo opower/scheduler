@@ -70,7 +70,7 @@ export default function Appointment (props){
       {mode === ERROR_DELETE && <Error message={cancelMsg} onCancel={onCancel}/>}
       {mode === ERROR_SAVE && <Error message={cancelMsg} onCancel={onCancel}/>}
       {mode === SAVING && <Status message={SAVING} />}
-      {mode === SHOW && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
+      {mode === SHOW && interview && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
       {mode === DELETE && <Status message={DELETE}/>}
       {mode === CONFIRM && <Confirm message={msg} onCancel={onCancel} onConfirm={onDelete} />}
       {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
