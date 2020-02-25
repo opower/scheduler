@@ -20,6 +20,7 @@ const EDIT = 'EDIT';
 const ERROR_SAVE = 'ERROR_SAVE';
 const ERROR_DELETE = 'ERROR_DELETE';
 const cancelMsg = 'Could not cancel appointment';
+const saveMsg = 'Could not save appointment';
 
 
 export default function Appointment (props){
@@ -68,7 +69,7 @@ export default function Appointment (props){
       {mode === EMPTY && <Empty onAdd={onAdd} />}
       {mode === CREATE && <Form interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
       {mode === ERROR_DELETE && <Error message={cancelMsg} onCancel={onCancel}/>}
-      {mode === ERROR_SAVE && <Error message={cancelMsg} onCancel={onCancel}/>}
+      {mode === ERROR_SAVE && <Error message={saveMsg} onCancel={onCancel}/>}
       {mode === SAVING && <Status message={SAVING} />}
       {mode === SHOW && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
       {mode === DELETE && <Status message={DELETE}/>}

@@ -1,26 +1,8 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
+import { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, reducer } from "reducers/application";
 
 export default function useApplicationData(){
-
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
-
-  const lookUp = {
-    SET_DAY: (state, action) => {
-      const { day } = action;
-      return {...state, day}
-    },
-    SET_APPLICATION_DATA: (state, action) => {
-      const { days, appointments, interviewers } = action;
-      return {...state, days, appointments, interviewers}
-    },
-    SET_INTERVIEW: (state, action) => {
-      const { interview, appointments, days} = action;
-      return interview ? {...state, appointments, days} : {...state, appointments, days};
-    }
-  }
 
   const [state, dispatch] = useReducer(reducer,{
     day: "Monday",
@@ -28,10 +10,6 @@ export default function useApplicationData(){
     appointments: {},
     interviewer: {}
   });
-
-  function reducer(state, action) {
-    return lookUp[action.type](state, action);
-  }
 
   const setDay = day => dispatch({type: SET_DAY, day});
   
@@ -60,7 +38,6 @@ export default function useApplicationData(){
     };
     return axios.put(`/api/appointments/${id}`, appointment)
     .then(() => dispatch({type: SET_INTERVIEW, interview, appointments, days}))
-    .catch(err => console.log(err))
   }
   
   function cancelInterview(id){
@@ -78,7 +55,6 @@ export default function useApplicationData(){
 
     return axios.delete(`/api/appointments/${id}`)
     .then(() => dispatch({type: SET_INTERVIEW, id, appointments, interview: null, days}))
-    .catch(err => console.log(err))
   }
 
   //appointment id is know when an interview is confirmed or canceled
