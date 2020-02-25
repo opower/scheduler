@@ -36,7 +36,7 @@ export default function useApplicationData(){
   const setDay = day => dispatch({type: SET_DAY, day});
   
   useEffect(()=>{
-    let days = axios.get('api/days');
+    let days = axios.get('/api/days');
     let appointments = axios.get('/api/appointments');
     let interviewers = axios.get('/api/interviewers');
     Promise.all([days, appointments, interviewers])
