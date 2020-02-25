@@ -1,6 +1,5 @@
 import { useReducer, useEffect } from 'react';
 import axios from 'axios';
-const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData(){
 
@@ -14,8 +13,8 @@ export default function useApplicationData(){
       return {...state, day}
     },
     SET_APPLICATION_DATA: (state, action) => {
-      const { all } = action;
-      return {days: all[0].data, appointments: all[1].data, interviewers: all[2].data}
+      const { days, appointments, interviewers } = action;
+      return {...state, days, appointments, interviewers}
     },
     SET_INTERVIEW: (state, action) => {
       const { interview, appointments, days} = action;
@@ -40,26 +39,9 @@ export default function useApplicationData(){
     let days = axios.get('api/days');
     let appointments = axios.get('/api/appointments');
     let interviewers = axios.get('/api/interviewers');
-    // let webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
-    // webSocket.onopen = function (event) {
-    //   let msg = {
-    //     type: SET_INTERVIEW
-    //   }
-    //   webSocket.send(JSON.stringify(msg)); 
-    // }
-
-    // webSocket.onmessage = function (event){
-    //   let { type, id, interview } = JSON.parse(event.data);
-    //   if(type === 'SET_INTERVIEW'){
-    //     dispatch({type, id, interview});
-    //   }
-    // }
-    
-    // webSocket.close();
-
     Promise.all([days, appointments, interviewers])
     .then(all => {
-      dispatch({type: SET_APPLICATION_DATA, days, interviewers, appointments, all});
+      dispatch({type: SET_APPLICATION_DATA, days: all[0].data, interviewers:all[2].data, appointments:all[1].data});
     })
     .catch(err => console.log(err));
   },[])
@@ -78,6 +60,7 @@ export default function useApplicationData(){
     };
     return axios.put(`/api/appointments/${id}`, appointment)
     .then(() => dispatch({type: SET_INTERVIEW, interview, appointments, days}))
+    .catch(err => console.log(err))
   }
   
   function cancelInterview(id){
@@ -95,6 +78,7 @@ export default function useApplicationData(){
 
     return axios.delete(`/api/appointments/${id}`)
     .then(() => dispatch({type: SET_INTERVIEW, id, appointments, interview: null, days}))
+    .catch(err => console.log(err))
   }
 
   //appointment id is know when an interview is confirmed or canceled

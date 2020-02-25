@@ -22,7 +22,6 @@
   }
 
   export function getInterviewersForDay(state, day){
-
     const filteredDay = state.days.filter(day1 => day1.name === day);
     if(filteredDay.length === 0){
       return [];
