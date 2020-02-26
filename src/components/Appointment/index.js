@@ -52,6 +52,9 @@ export default function Appointment (props){
 
 
   function save(name, interviewer) {
+    if(!interviewer){
+      interviewer = props.interviewers[0].id;
+    }
     const interview = {
       student: name,
       interviewer
