@@ -24,6 +24,12 @@ export default function useApplicationData(){
     .catch(err => console.log(err));
   },[])
   
+  /**
+   * 
+   * @param id 
+   * @param interview 
+   * returns an axios request to the API that saves an interview then dispatches to update the state
+   */
   function bookInterview(id, interview) {
 
     const days = updateSpots(id, true);
@@ -40,6 +46,11 @@ export default function useApplicationData(){
     .then(() => dispatch({type: SET_INTERVIEW, interview, appointments, days}))
   }
   
+  /**
+   * 
+   * @param id 
+   * returns an axios delete request to the API and calls dispatch to update the state
+   */
   function cancelInterview(id){
 
     const days = updateSpots(id, false);
@@ -57,8 +68,14 @@ export default function useApplicationData(){
     .then(() => dispatch({type: SET_INTERVIEW, id, appointments, interview: null, days}))
   }
 
-  //appointment id is know when an interview is confirmed or canceled
+  /**
+   * 
+   * @param id 
+   * @param flag 
+   * returns an updated state.days
+   */
   function updateSpots(id, flag){
+    //filters through the state.days to find a day the day that includes the appoinment that matches the appointment id
     const filterDay = state.days.filter(day => day.appointments.includes(id));
     const dayId = filterDay[0].id;
     let newSpots = state.days[dayId - 1].spots;
@@ -69,6 +86,7 @@ export default function useApplicationData(){
       newSpots++;
     }
 
+    //map through state.days and changes update the day.id that matches dayId
     return state.days.map(day => {
       if(day.id !== dayId){
         return day

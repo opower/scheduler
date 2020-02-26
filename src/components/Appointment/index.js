@@ -43,6 +43,9 @@ export default function Appointment (props){
     transition(CONFIRM);
   }
 
+  /**
+   * Calls props.cancelInterview with a give props.id and transitions to EMPTY
+   */
   function onDelete(){
     transition(DELETE)
     props.cancelInterview(props.id)
@@ -50,8 +53,14 @@ export default function Appointment (props){
     .catch(err => transition(ERROR_DELETE, true))
   }
 
-
+  /**
+   * 
+   * @param name 
+   * @param interviewer 
+   * calls props.bookInterview and transistion to SHOW
+   */
   function save(name, interviewer) {
+    //checks if the inteviewer is null, if so set the interviewer id to the first in the interviewers array
     if(!interviewer){
       interviewer = props.interviewers[0].id;
     }

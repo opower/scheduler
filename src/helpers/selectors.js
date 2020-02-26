@@ -1,5 +1,11 @@
-  //will return an aray of appointments for the given day
+  /**
+   * 
+   * @param state 
+   * @param day 
+   * returns and array of appointments for the given day
+   */
   export function getAppointmentsForDay(state, day){
+    //filters through state.days to find the day.name that matches day
     const filteredDay = state.days.filter(day1 => day1.name === day);
     if(filteredDay.length === 0){
       return [];
@@ -21,14 +27,21 @@
     return appoint;
   }
 
+  /**
+   * 
+   * @param state 
+   * @param day 
+   * returns an array of interviewers for a given day
+   */
   export function getInterviewersForDay(state, day){
+    //filters through state.days to find the day.name that matches day
     const filteredDay = state.days.filter(day1 => day1.name === day);
     if(filteredDay.length === 0){
       return [];
     }
     let dayInterviewers = filteredDay[0].interviewers;
     if(dayInterviewers.length === 0){
-      return [];
+      return []; 
     }
     let interviewers = Object.values(state.interviewers)
 
@@ -39,9 +52,14 @@
       }
     }
     return ints;
-
   }
 
+  /**
+   * 
+   * @param state 
+   * @param interview 
+   * returns an interviewObj that includes the student name, time, and the interviewer(interviewer is an array)
+   */
   export function getInterview(state, interview){
 
     if(!interview){

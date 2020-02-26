@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+/**
+ * 
+ * @param initial 
+ * A custom hook that allows the user to transition between states
+ */
 export default function useVisualMode(initial){
   const[mode, setMode] = useState(initial);
   const[history, setHistory] = useState([initial]);
