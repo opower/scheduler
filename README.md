@@ -1,5 +1,9 @@
 # Interview Scheduler
 
+## Description
+
+A full-stack web single page application that utilizes React, Node, Express, JavaScript and Postgres.
+
 ## Setup
 
 Install dependencies with `npm install`.
