@@ -21,3 +21,9 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Screenshots
+
+!["Appointment List"](https://github.com/opower/scheduler/blob/master/docs/appointment-list.png?raw=true)
+!["Appointment Delete Option"](https://github.com/opower/scheduler/blob/master/docs/appointment-delete.png?raw=true)
+!["Appointment Form"](https://github.com/opower/scheduler/blob/master/docs/appointment-form.png?raw=true)
