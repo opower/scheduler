@@ -5,11 +5,11 @@ export const SET_INTERVIEW = "SET_INTERVIEW";
 const lookUp = {
   SET_DAY: (state, action) => {
     const { day } = action;
-    return {...state, day}
+    return {...state, day};
   },
   SET_APPLICATION_DATA: (state, action) => {
     const { days, appointments, interviewers } = action;
-    return {...state, days, appointments, interviewers}
+    return {...state, days, appointments, interviewers};
   },
   SET_INTERVIEW: (state, action) => {
     const { interview, appointments, days} = action;

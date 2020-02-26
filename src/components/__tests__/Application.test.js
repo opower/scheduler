@@ -1,7 +1,6 @@
 import React from "react";
-import { render, waitForElement, prettyDOM, fireEvent, getByAltText, getByText, getAllByTestId, getByPlaceholderText, queryByText, queryByAltText} from "@testing-library/react";
+import { render, waitForElement,fireEvent, getByAltText, getByText, getAllByTestId, getByPlaceholderText, queryByText, queryByAltText} from "@testing-library/react";
 import Application from "components/Application";
-import { act } from 'react-dom/test-utils';
 import axios from "axios";
 
 describe('Application', () => {
@@ -109,7 +108,7 @@ describe('Application', () => {
   });
   it("shows the save error when failing to save an appointment", async() =>{
     axios.put.mockRejectedValueOnce();
-    const { container, debug} = render(<Application />);
+    const { container} = render(<Application />);
   
     await waitForElement(() => getByText(container, "Archie Cohen"));
   
@@ -134,7 +133,7 @@ describe('Application', () => {
   it("shows the delete error when failing to delete an existing appointment", async ()=>{
     axios.delete.mockRejectedValueOnce();
 
-    const { container} = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -155,8 +154,6 @@ describe('Application', () => {
     await waitForElement(()=> axios.delete.mockRejectedValueOnce())
 
     expect(getByText(appointment, 'Could not cancel appointment')).toBeInTheDocument();
-  })
+  });
   
-
-
 });
