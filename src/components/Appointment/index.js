@@ -61,9 +61,6 @@ export default function Appointment (props){
    */
   function save(name, interviewer) {
     //checks if the inteviewer is null, if so set the interviewer id to the first in the interviewers array
-    if(!interviewer){
-      interviewer = props.interviewers[0].id;
-    }
     const interview = {
       student: name,
       interviewer
@@ -86,7 +83,7 @@ export default function Appointment (props){
       {mode === SHOW && <Show student={props.interview.student}  interviewer={props.interview.interviewer} onDelete={onConfirm} onEdit={onEdit}/>}
       {mode === DELETE && <Status message={DELETE}/>}
       {mode === CONFIRM && <Confirm message={msg} onCancel={onCancel} onConfirm={onDelete} />}
-      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
+      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onCancel={onCancel} onSave={save}/>}
 
     </article>
   )
